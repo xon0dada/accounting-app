@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>日常記帳</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Money Ledger</p>
+          <h1>日常記帳</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="exportJsonBtn" type="button" title="匯出 JSON" aria-label="匯出 JSON">
+            <span aria-hidden="true">⬇</span>
+          </button>
+          <button class="icon-button" id="exportCsvBtn" type="button" title="匯出 CSV" aria-label="匯出 CSV">
+            <span aria-hidden="true">⇩</span>
+          </button>
+          <label class="icon-button" for="importInput" title="匯入 JSON" aria-label="匯入 JSON">
+            <span aria-hidden="true">⬆</span>
+          </label>
+          <input id="importInput" class="visually-hidden" type="file" accept="application/json,.json">
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="entry-panel" aria-labelledby="entryTitle">
+          <div class="section-heading">
+            <h2 id="entryTitle">新增紀錄</h2>
+            <div class="type-switch" role="group" aria-label="收支類型">
+              <button class="type-button active" type="button" data-type="expense">支出</button>
+              <button class="type-button" type="button" data-type="income">收入</button>
+            </div>
+          </div>
+
+          <form id="transactionForm" class="transaction-form">
+            <input type="hidden" id="typeInput" value="expense">
+            <div class="field-grid">
+              <label>
+                <span>日期</span>
+                <input id="dateInput" type="date" required>
+              </label>
+              <label>
+                <span>金額</span>
+                <input id="amountInput" type="number" min="1" step="1" inputmode="decimal" placeholder="0" required>
+              </label>
+              <label>
+                <span>分類</span>
+                <select id="categoryInput" required></select>
+              </label>
+              <label>
+                <span>付款方式</span>
+                <select id="methodInput">
+                  <option>現金</option>
+                  <option>信用卡</option>
+                  <option>金融卡</option>
+                  <option>轉帳</option>
+                  <option>電子支付</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              <span>備註</span>
+              <input id="noteInput" type="text" maxlength="80" placeholder="早餐、薪資、房租...">
+            </label>
+            <button class="primary-button" type="submit">新增</button>
+          </form>
+        </section>
+
+        <section class="summary-panel" aria-labelledby="summaryTitle">
+          <div class="section-heading">
+            <h2 id="summaryTitle">本月總覽</h2>
+            <input id="monthInput" class="month-input" type="month" aria-label="選擇月份">
+          </div>
+          <div class="summary-grid">
+            <article class="metric income">
+              <span>收入</span>
+              <strong id="incomeMetric">$0</strong>
+            </article>
+            <article class="metric expense">
+              <span>支出</span>
+              <strong id="expenseMetric">$0</strong>
+            </article>
+            <article class="metric balance">
+              <span>結餘</span>
+              <strong id="balanceMetric">$0</strong>
+            </article>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-header">
+              <h3>分類分布</h3>
+              <span id="chartTotal">$0</span>
+            </div>
+            <div id="categoryChart" class="category-chart" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="records-panel" aria-labelledby="recordsTitle">
+          <div class="section-heading records-heading">
+            <h2 id="recordsTitle">交易紀錄</h2>
+            <div class="filters">
+              <select id="filterType" aria-label="篩選類型">
+                <option value="all">全部</option>
+                <option value="expense">支出</option>
+                <option value="income">收入</option>
+              </select>
+              <input id="searchInput" type="search" placeholder="搜尋分類或備註" aria-label="搜尋分類或備註">
+            </div>
+          </div>
+          <div id="recordsList" class="records-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="recordTemplate">
+      <article class="record-row">
+        <div class="record-main">
+          <span class="record-dot"></span>
+          <div>
+            <strong class="record-title"></strong>
+            <p class="record-meta"></p>
+          </div>
+        </div>
+        <div class="record-side">
+          <strong class="record-amount"></strong>
+          <button class="delete-button" type="button" title="刪除" aria-label="刪除">×</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
